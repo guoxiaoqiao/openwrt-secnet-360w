@@ -32,6 +32,7 @@
 #include "dev-usb.h"
 #include "dev-wmac.h"
 #include "machtypes.h"
+#include "pci.h"
 
 #define TL_WR810N_GPIO_SWITCH_B1	0
 #define TL_WR810N_GPIO_SWITCH_B0	1
@@ -125,10 +126,7 @@ static void __init tl_wr810n_setup(void)
 
 	ath79_register_wmac(art + TL_WR810N_WMAC_CALDATA_OFFSET, mac);
 
-	gpio_request_one(TL_WR810N_GPIO_USB_POWER,
-			 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
-			 "USB power");
-	ath79_register_usb();
+	ath79_register_pci();
 }
 
 MIPS_MACHINE(ATH79_MACH_TL_WR810N, "TL-WR810N", "TP-LINK TL-WR810N",

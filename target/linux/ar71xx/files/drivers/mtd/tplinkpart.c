@@ -16,13 +16,14 @@
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
 
-#define TPLINK_NUM_PARTS	5
+#define TPLINK_NUM_PARTS	8
 #define TPLINK_HEADER_V1	0x01000000
 #define TPLINK_HEADER_V2	0x02000000
 #define MD5SUM_LEN		16
 
 #define TPLINK_ART_LEN		0x10000
-#define TPLINK_KERNEL_OFFS	0x20000
+#define TPLINK_CONFIG_LEN	0x10000
+#define TPLINK_KERNEL_OFFS	0x50000
 #define TPLINK_64K_KERNEL_OFFS	0x10000
 
 struct tplink_fw_header {
@@ -116,7 +117,7 @@ static int tplink_parse_partitions_offset(struct mtd_info *master,
 	struct mtd_partition *parts;
 	struct tplink_fw_header *header;
 	int nr_parts;
-	size_t art_offset;
+	size_t art_offset, config_offset;
 	size_t rootfs_offset;
 	size_t squashfs_offset;
 	int ret;
@@ -144,29 +145,45 @@ static int tplink_parse_partitions_offset(struct mtd_info *master,
 	else
 		rootfs_offset = offset + be32_to_cpu(header->rootfs_ofs);
 
+	config_offset = master->size - TPLINK_ART_LEN - TPLINK_CONFIG_LEN;
 	art_offset = master->size - TPLINK_ART_LEN;
 
 	parts[0].name = "u-boot";
 	parts[0].offset = 0;
-	parts[0].size = offset;
+	parts[0].size = 0x30000;
 	parts[0].mask_flags = MTD_WRITEABLE;
 
-	parts[1].name = "kernel";
-	parts[1].offset = offset;
-	parts[1].size = rootfs_offset - offset;
+	parts[1].name = "factory";
+	parts[1].offset = 0x30000;
+	parts[1].size = 0x10000;
+	parts[1].mask_flags = MTD_WRITEABLE;
 
-	parts[2].name = "rootfs";
-	parts[2].offset = rootfs_offset;
-	parts[2].size = art_offset - rootfs_offset;
+	parts[2].name = "buginfo";
+	parts[2].offset = 0x40000;
+	parts[2].size = 0x10000;
+	parts[2].mask_flags = MTD_WRITEABLE;
 
-	parts[3].name = "art";
-	parts[3].offset = art_offset;
-	parts[3].size = TPLINK_ART_LEN;
-	parts[3].mask_flags = MTD_WRITEABLE;
+	parts[3].name = "kernel";
+	parts[3].offset = offset;
+	parts[3].size = rootfs_offset - offset;
 
-	parts[4].name = "firmware";
-	parts[4].offset = offset;
-	parts[4].size = art_offset - offset;
+	parts[4].name = "rootfs";
+	parts[4].offset = rootfs_offset;
+	parts[4].size = config_offset - rootfs_offset;
+
+	parts[5].name = "config";
+	parts[5].offset = config_offset;
+	parts[5].size = TPLINK_CONFIG_LEN;
+	parts[5].mask_flags = MTD_WRITEABLE;
+
+	parts[6].name = "art";
+	parts[6].offset = art_offset;
+	parts[6].size = TPLINK_ART_LEN;
+	parts[6].mask_flags = MTD_WRITEABLE;
+
+	parts[7].name = "firmware";
+	parts[7].offset = offset;
+	parts[7].size = config_offset - offset;
 
 	vfree(header);
 
