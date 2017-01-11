@@ -34,11 +34,8 @@
 #include "machtypes.h"
 #include "pci.h"
 
-#define TL_WR810N_GPIO_SWITCH_B1	0
-#define TL_WR810N_GPIO_SWITCH_B0	1
-#define TL_WR810N_GPIO_USB_POWER	11
-#define TL_WR810N_GPIO_BTN_RESET	12
-#define TL_WR810N_GPIO_LED_SYSTEM	13
+#define TL_WR810N_GPIO_BTN_RESET	3
+#define TL_WR810N_GPIO_LED_WLAN	12
 
 #define TL_WR810N_KEYS_POLL_INTERVAL	20 /* msecs */
 #define TL_WR810N_KEYS_DEBOUNCE_INTERVAL (3 * TL_WR810N_KEYS_POLL_INTERVAL)
@@ -56,8 +53,8 @@ static struct flash_platform_data tl_wr810n_flash_data = {
 
 static struct gpio_led tl_wr810n_leds_gpio[] __initdata = {
 	{
-		.name		= "tp-link:blue:system",
-		.gpio		= TL_WR810N_GPIO_LED_SYSTEM,
+		.name		= "tp-link:green:wlan",
+		.gpio		= TL_WR810N_GPIO_LED_WLAN,
 		.active_low	= 1,
 	},
 };
@@ -71,27 +68,11 @@ static struct gpio_keys_button tl_wr810n_gpio_keys[] __initdata = {
 		.gpio		= TL_WR810N_GPIO_BTN_RESET,
 		.active_low	= 1,
 	},
-	{
-		.desc		= "switch_b0",
-		.type		= EV_SW,
-		.code		= BTN_0,
-		.debounce_interval = TL_WR810N_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= TL_WR810N_GPIO_SWITCH_B0,
-		.active_low	= 0,
-	},
-	{
-		.desc		= "switch_b1",
-		.type		= EV_SW,
-		.code		= BTN_1,
-		.debounce_interval = TL_WR810N_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= TL_WR810N_GPIO_SWITCH_B1,
-		.active_low	= 0,
-	},
 };
 
 static void __init tl_wr810n_setup(void)
 {
-	u8 *mac = (u8 *) KSEG1ADDR(0x1f01fc00);
+	u8 *mac = (u8 *) KSEG1ADDR(0x1f040000);
 	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
 
 	ath79_setup_ar933x_phy4_switch(false, false);

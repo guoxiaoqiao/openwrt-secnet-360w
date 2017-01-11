@@ -666,6 +666,7 @@ tl-wa901nd-v4)
 	ucidef_set_led_wlan "wlan" "WLAN" "tp-link:green:wlan" "phy0tpt"
 	;;
 
+tl-wr810n | \
 tl-wr941nd | \
 tl-wr1041n-v2)
 	ucidef_set_led_wlan "wlan" "WLAN" "tp-link:green:wlan" "phy0tpt"
