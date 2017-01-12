@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ath10k-firmware
-PKG_SOURCE_VERSION:=b00eb8d30fbebb6a5047ccacefa8c37e072fca9c
-PKG_VERSION:=2014-11-13-$(PKG_SOURCE_VERSION)
+PKG_SOURCE_VERSION:=ab432c60437931a165f0aff1a6e3371f358b75dd
+PKG_VERSION:=2017-01-11-$(PKG_SOURCE_VERSION)
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -38,6 +38,7 @@ $(Package/ath10k-firmware-default)
 endef
 
 QCA988X_FIRMWARE_FILE:=firmware-5.bin_10.2.4.97-1
+QCA9887_FIRMWARE_FILE:=10.2.4-1.0/firmware-5.bin_10.2.4-1.0-00016
 QCA988X_FIRMWARE_FILE_CT:=firmware-2-ct-full-community-16.bin-lede
 QCA99X0_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-7.bin-lede.001
 
@@ -54,6 +55,12 @@ define Download/ath10k-firmware-qca988x-ct
   MD5SUM:=5b651c0458bcf5c20701308b5e519976
 endef
 $(eval $(call Download,ath10k-firmware-qca988x-ct))
+
+define Package/ath10k-firmware-qca9887
+$(Package/ath10k-firmware-default)
+  DEFAULT:=PACKAGE_kmod-ath10k
+  TITLE:=ath10k firmware for QCA9887 devices
+endef
 
 define Download/ath10k-firmware-qca99x0-ct
   URL:=https://www.candelatech.com/downloads/ath10k-10-4/
@@ -128,7 +135,7 @@ endef
 define Package/ath10k-firmware-qca988x/install
 	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA988X/hw2.0
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA988X/board.bin \
+		$(PKG_BUILD_DIR)/QCA988X/hw2.0/board.bin \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/
 	$(INSTALL_DATA) \
 		$(DL_DIR)/$(QCA988X_FIRMWARE_FILE) \
@@ -138,11 +145,21 @@ endef
 define Package/ath10k-firmware-qca988x-ct/install
 	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA988X/hw2.0
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA988X/board.bin \
+		$(PKG_BUILD_DIR)/QCA988X/hw2.0/board.bin \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/
 	$(INSTALL_DATA) \
 		$(DL_DIR)/$(QCA988X_FIRMWARE_FILE_CT) \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/firmware-2.bin
+endef
+
+define Package/ath10k-firmware-qca9887/install
+	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA9887/hw1.0
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA9887/hw1.0/board.bin \
+		$(1)/lib/firmware/ath10k/QCA9887/hw1.0/
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA9887/hw1.0/$(QCA9887_FIRMWARE_FILE) \
+		$(1)/lib/firmware/ath10k/QCA9887/hw1.0/firmware-5.bin
 endef
 
 define Package/ath10k-firmware-qca6174/install
@@ -188,6 +205,7 @@ define Package/ath10k-firmware-qca9984/install
 endef
 
 $(eval $(call BuildPackage,ath10k-firmware-qca988x))
+$(eval $(call BuildPackage,ath10k-firmware-qca9887))
 $(eval $(call BuildPackage,ath10k-firmware-qca99x0))
 $(eval $(call BuildPackage,ath10k-firmware-qca6174))
 $(eval $(call BuildPackage,ath10k-firmware-qca9984))
