@@ -38,7 +38,7 @@
 #define TL_WDR6500_V2_KEYS_POLL_INTERVAL	20	/* msecs */
 #define TL_WDR6500_V2_KEYS_DEBOUNCE_INTERVAL	(3 * TL_WDR6500_V2_KEYS_POLL_INTERVAL)
 
-#define TL_WDR6500_V2_WMAC_CALDATA_OFFSET	0x1000
+#define TL_WDR6500_V2_WMAC_CALDATA_OFFSET	0x0000
 #define TL_WDR6500_V2_PCIE_CALDATA_OFFSET	0x5000
 
 static const char *tl_wdr6500_v2_part_probes[] = {
@@ -92,8 +92,8 @@ static struct gpio_keys_button tl_wdr6500_v2_gpio_keys[] __initdata = {
 
 static void __init tl_ap151_setup(void)
 {
-	u8 *mac = (u8 *) KSEG1ADDR(0x1f00fc00);
-	u8 *ee = (u8 *) KSEG1ADDR(0x1fff0000);
+	u8 *mac = (u8 *) KSEG1ADDR(0x1fff0000);
+	u8 *ee = (u8 *) KSEG1ADDR(0x1fff0800);
 	u8 tmpmac[ETH_ALEN];
 
 	ath79_register_m25p80(&tl_wdr6500_v2_flash_data);
@@ -122,8 +122,6 @@ static void __init tl_ap151_setup(void)
 	ath79_register_wmac(ee + TL_WDR6500_V2_WMAC_CALDATA_OFFSET, tmpmac);
 
 	ath79_register_pci();
-
-	ath79_register_usb();
 }
 
 static void __init tl_wdr6500_v2_setup(void)

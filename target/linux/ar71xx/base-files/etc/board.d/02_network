@@ -230,7 +230,6 @@ tl-wr841n-v8 |\
 tl-wr842n-v2 |\
 tl-wr941nd-v5 |\
 tl-wr941nd-v6 |\
-tl-wdr6500-v2 |\
 wnr2000-v3 |\
 wnr2000-v4 |\
 wnr2200 |\
@@ -240,6 +239,12 @@ wpn824n)
 	ucidef_set_interfaces_lan_wan "eth1" "eth0"
 	ucidef_add_switch "switch0" \
 		"0:lan:4" "1:lan:3" "2:lan:2" "3:lan:1" "4@eth1" # XXX: confirm!
+	;;
+
+tl-wdr6500-v2)
+	ucidef_set_interfaces_lan_wan "eth1.1" "eth1.2"
+	ucidef_add_switch "eth1" \
+		"0@eth1" "1:lan" "2:lan" "3:lan" "4:wan"
 	;;
 
 uap-pro)
