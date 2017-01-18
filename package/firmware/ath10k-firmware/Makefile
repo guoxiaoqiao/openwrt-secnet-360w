@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ath10k-firmware
-PKG_SOURCE_VERSION:=b00eb8d30fbebb6a5047ccacefa8c37e072fca9c
-PKG_VERSION:=2014-11-13-$(PKG_SOURCE_VERSION)
+PKG_SOURCE_VERSION:=ab432c60437931a165f0aff1a6e3371f358b75dd
+PKG_VERSION:=2017-01-11-$(PKG_SOURCE_VERSION)
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -35,6 +35,12 @@ define Package/ath10k-firmware-qca988x
 $(Package/ath10k-firmware-default)
   DEFAULT:=PACKAGE_kmod-ath10k
   TITLE:=ath10k firmware for QCA988x devices
+endef
+
+define Package/ath10k-firmware-qca9888
+$(Package/ath10k-firmware-default)
+  DEFAULT:=PACKAGE_kmod-ath10k
+  TITLE:=ath10k firmware for QCA9886 and QCA9888 devices
 endef
 
 QCA988X_FIRMWARE_FILE:=firmware-5.bin_10.2.4.97-1
@@ -128,7 +134,7 @@ endef
 define Package/ath10k-firmware-qca988x/install
 	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA988X/hw2.0
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA988X/board.bin \
+		$(PKG_BUILD_DIR)/QCA988X/hw2.0/board.bin \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/
 	$(INSTALL_DATA) \
 		$(DL_DIR)/$(QCA988X_FIRMWARE_FILE) \
@@ -143,6 +149,19 @@ define Package/ath10k-firmware-qca988x-ct/install
 	$(INSTALL_DATA) \
 		$(DL_DIR)/$(QCA988X_FIRMWARE_FILE_CT) \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/firmware-2.bin
+endef
+
+define Package/ath10k-firmware-qca9888/install
+	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA9888/hw2.0
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA9888/hw2.0/board-2.bin \
+		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/board.bin
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA9888/hw2.0/board-2.bin \
+		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/board-2.bin
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA9888/hw2.0/3.3/firmware-5.bin_10.4-3.3-00092 \
+		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/firmware-5.bin
 endef
 
 define Package/ath10k-firmware-qca6174/install
@@ -188,6 +207,7 @@ define Package/ath10k-firmware-qca9984/install
 endef
 
 $(eval $(call BuildPackage,ath10k-firmware-qca988x))
+$(eval $(call BuildPackage,ath10k-firmware-qca9888))
 $(eval $(call BuildPackage,ath10k-firmware-qca99x0))
 $(eval $(call BuildPackage,ath10k-firmware-qca6174))
 $(eval $(call BuildPackage,ath10k-firmware-qca9984))
