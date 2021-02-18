@@ -29,3 +29,5 @@ git-src
 .project
 .cproject
 .ccache
+/bin*
+/config*
