@@ -1,0 +1,3 @@
+[submodule "package/qiao/luci-app-ssr-plus"]
+	path = package/qiao/luci-app-ssr-plus
+	url = https://github.com/guoxiaoqiao/luci-app-ssr-plus.git
