@@ -1,3 +1,9 @@
 [submodule "package/qiao/luci-app-ssr-plus"]
 	path = package/qiao/luci-app-ssr-plus
 	url = https://github.com/guoxiaoqiao/luci-app-ssr-plus.git
+[submodule "package/qiao/openwrt-vlmcsd"]
+	path = package/qiao/openwrt-vlmcsd
+	url = https://github.com/cokebar/openwrt-vlmcsd.git
+[submodule "package/qiao/luci-app-vlmcsd"]
+	path = package/qiao/luci-app-vlmcsd
+	url = https://github.com/cokebar/luci-app-vlmcsd.git
