@@ -1,6 +1,7 @@
 [submodule "package/qiao/luci-app-ssr-plus"]
 	path = package/qiao/luci-app-ssr-plus
 	url = https://github.com/guoxiaoqiao/luci-app-ssr-plus.git
+	branch = use-china-domain-list
 [submodule "package/qiao/openwrt-vlmcsd"]
 	path = package/qiao/openwrt-vlmcsd
 	url = https://github.com/cokebar/openwrt-vlmcsd.git
